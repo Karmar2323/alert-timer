@@ -5,9 +5,10 @@ Backend::Backend()
 {
 
     setAlertCounter(m_defaultTimeout);
-    m_timeLeftTimer.setInterval(300);
-    connect(&m_alertCounter, &QTimer::timeout, this, &Backend::stopCounting);
-    connect(&m_timeLeftTimer, &QTimer::timeout, this, &Backend::setTimeLeftProperty);
+    m_timeLeftTimer.setInterval(500);
+    QObject::connect(&m_alertCounter, &QTimer::timeout, this, &Backend::stopCounting);
+    QObject::connect(&m_alertCounter, &QTimer::timeout, this, &Backend::soundAlarm);
+    QObject::connect(&m_timeLeftTimer, &QTimer::timeout, this, &Backend::setTimeLeftProperty);
 }
 
 void Backend::setTimeLeftProperty(){
@@ -29,7 +30,20 @@ void Backend::startCounting()
     setCounterOn(true);
     qDebug() << "starts counting, counter active: " << m_alertCounter.isActive();
 
+}
 
+
+void Backend::soundAlarm() {
+    setAlarm(true);
+    qDebug() << "alarm:" << alarm();
+    // start timer to turn alarm off
+    QTimer::singleShot(m_alarmDuration, this, &Backend::stopAlarm);
+    stopCounting();
+}
+
+void Backend::stopAlarm() {
+    setAlarm(false);
+    qDebug() << "alarm:" << alarm();
 }
 
 void Backend::stopCounting()
@@ -38,6 +52,7 @@ void Backend::stopCounting()
     if (m_alertCounter.isActive()) {
         m_alertCounter.stop();
         setCounterOn(false);
+
     }
 
     qDebug() << "stop counting, counter active: " << m_alertCounter.isActive();
@@ -82,4 +97,18 @@ void Backend::setTimeLeft(int newTimeLeft)
         return;
     m_timeLeft = newTimeLeft;
     emit timeLeftChanged();
+}
+
+
+bool Backend::alarm() const
+{
+    return m_alarm;
+}
+
+void Backend::setAlarm(bool newAlarm)
+{
+    if (m_alarm == newAlarm)
+        return;
+    m_alarm = newAlarm;
+    emit alarmChanged();
 }

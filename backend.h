@@ -16,6 +16,7 @@ class Backend : public QObject
     Q_PROPERTY(bool counterOn READ counterOn WRITE setCounterOn NOTIFY counterOnChanged)
     Q_PROPERTY(int defaultTimeout READ defaultTimeout WRITE setDefaultTimeout NOTIFY defaultTimeoutChanged)
     Q_PROPERTY(int timeLeft READ timeLeft WRITE setTimeLeft NOTIFY timeLeftChanged)
+    Q_PROPERTY(bool alarm READ alarm WRITE setAlarm NOTIFY alarmChanged)
 public:
     Backend();
 
@@ -25,13 +26,21 @@ public:
     int timeLeft() const;
 
 
+    bool alertTime() const;
+    void setAlertTime(bool newAlertTime);
+
+    bool alarm() const;
+    void setAlarm(bool newAlarm);
+
 private:
     bool m_counterOn;
 
     QTimer m_alertCounter;
     QTimer m_timeLeftTimer;
-    int m_defaultTimeout = 4000;
-    int m_timeLeft;
+
+    int m_defaultTimeout = 1.8e6 + 5000;
+    int m_timeLeft = 0;
+    int m_alarmDuration = 30000;//1800000;
 
     bool counterOn() const;
     void setCounterOn(bool newCounterOn);
@@ -41,11 +50,18 @@ private:
 
     void setDefaultTimeout(int newDefaultTimeout);
     void setTimeLeftProperty();
+    bool m_alarm = false; // set true when counter zeroes
+
+public slots:
+    void stopAlarm();
+    void soundAlarm();
 signals:
     void counterOnChanged();
     void defaultTimeoutChanged();
 
     void timeLeftChanged();
+    void alertTimeChanged();
+    void alarmChanged();
 };
 
 #endif // BACKEND_H
