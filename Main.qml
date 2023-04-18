@@ -4,17 +4,18 @@ import QtQuick.Controls
 import TimeAlerter
 import "logic.mjs" as Logic
 
-Window {
+ApplicationWindow {
     id: window
     width: 400
     height: 300
     visible: true
     title: qsTr("Time Alerter")
+    property string timeCount: Logic.formatMilliSecondsToTimeString(Backend.timeLeft)
 
     Grid {
         id: uiGrid
-        columns: 2
-        rows: 2
+        columns: 3
+        rows: 3
         spacing: 10
         padding: 10
 
@@ -23,7 +24,6 @@ Window {
             id: startRect
             width: 80; height: 50
             color: Backend.counterOn ? "red" : "lightgreen"
-            radius: 1.5
             Column {
                 spacing: 2
 
@@ -39,7 +39,10 @@ Window {
                     }
                     Button {
                         text: "Stop"
-                        onClicked: Backend.stopCounting()
+                        onClicked: () => {
+                                       Backend.stopCounting() //cancel upcoming alarm
+                                       Backend.alarm = false // stop current alarm
+                                   }
                     }
 
                 }
@@ -47,7 +50,7 @@ Window {
 
         }
 
-        Rectangle { color: "lightgreen"; width: 100; height: 50
+        Rectangle { color: "lightgreen"; width: 150; height: 50
 
             Column {
 
@@ -56,7 +59,7 @@ Window {
                 }
 
                 Text {
-                    text: qsTr("Left: " + Logic.formatMilliSecondsToTimeString(Backend.timeLeft))
+                    text: qsTr("Left: ") + window.timeCount
                 }
             }
         }
@@ -88,7 +91,7 @@ Window {
             }
 
             Text {
-                text: Backend.timeLeft * 0.001 + " s"
+                text: window.timeCount
                 color: "black"
                 anchors.verticalCenter: alarmRect.verticalCenter
                 anchors.horizontalCenter: alarmRect.horizontalCenter
@@ -97,6 +100,30 @@ Window {
             }
         }
 
+        }
+
+
+    Sliders {
+        id: timeSliders
+        anchors.top: uiGrid.bottom
+        x: 10
     }
+
+    Popup {
+        id: alertPopup
+        x: 100
+        y: 100
+        width: 200
+        height: 150
+        modal: false
+        focus: true
+        closePolicy: Popup.CloseOnEscape || Popup.CloseOnPressOutsideParent
+        visible: Backend.alarm
+        dim: true
+        contentItem: Text {
+            text: qsTr("ALARM! \n(Press Esc to close or click Stop)")
+        }
+    }
+
 
 }

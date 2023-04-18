@@ -91,6 +91,12 @@ int Backend::timeLeft() const
     return m_timeLeft;
 }
 
+void Backend::setAlertTime(int newAlertTime)
+{
+    setAlertCounter(newAlertTime);
+    m_defaultTimeout = newAlertTime;
+}
+
 void Backend::setTimeLeft(int newTimeLeft)
 {
     if (m_timeLeft == newTimeLeft)

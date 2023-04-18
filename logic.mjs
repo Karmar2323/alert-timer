@@ -1,6 +1,6 @@
 // logic.mjs
-/*  In: milliseconds
-    Out (String):  remaining hours, minutes, seconds
+/*  In (number): milliseconds
+    Out (string): input converted to hours, minutes, seconds (hh.mm.ss)
 */
 export function formatMilliSecondsToTimeString(msec) {
 

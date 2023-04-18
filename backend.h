@@ -27,7 +27,7 @@ public:
 
 
     bool alertTime() const;
-    void setAlertTime(bool newAlertTime);
+    Q_INVOKABLE void setAlertTime(int newAlertTime);
 
     bool alarm() const;
     void setAlarm(bool newAlarm);
@@ -38,9 +38,10 @@ private:
     QTimer m_alertCounter;
     QTimer m_timeLeftTimer;
 
-    int m_defaultTimeout = 1.8e6 + 5000;
+    int m_defaultTimeout = 4000;//1.8e6 + 5000;
     int m_timeLeft = 0;
     int m_alarmDuration = 30000;//1800000;
+    bool m_alarm = false; // set true when counter zeroes
 
     bool counterOn() const;
     void setCounterOn(bool newCounterOn);
@@ -50,7 +51,6 @@ private:
 
     void setDefaultTimeout(int newDefaultTimeout);
     void setTimeLeftProperty();
-    bool m_alarm = false; // set true when counter zeroes
 
 public slots:
     void stopAlarm();

@@ -4,7 +4,8 @@ project(TimeAlerter VERSION 0.1 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(Qt6 6.4 REQUIRED COMPONENTS Quick)
+find_package(Qt6 6.4 REQUIRED COMPONENTS Quick
+    Network)
 
 qt_standard_project_setup()
 
@@ -18,9 +19,9 @@ qt_add_qml_module(appTimeAlerter
     URI TimeAlerter
     VERSION 1.0
     QML_FILES Main.qml
-
-    RESOURCES
+    Sliders.qml
     logic.mjs
+
 )
 
 set_target_properties(appTimeAlerter PROPERTIES
@@ -33,6 +34,7 @@ set_target_properties(appTimeAlerter PROPERTIES
 
 target_link_libraries(appTimeAlerter
     PRIVATE Qt6::Quick
+    PRIVATE Qt6::Network
 )
 
 install(TARGETS appTimeAlerter
