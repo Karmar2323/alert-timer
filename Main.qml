@@ -19,7 +19,6 @@ ApplicationWindow {
         spacing: 10
         padding: 10
 
-
         Rectangle {
             id: startRect
             width: 80; height: 50
@@ -100,11 +99,12 @@ ApplicationWindow {
             }
         }
 
-        }
+    }
 
-
-    Sliders {
-        id: timeSliders
+    TimeRow {
+        id: timeTextInputs
+        width: 16
+        height: 16
         anchors.top: uiGrid.bottom
         x: 10
     }

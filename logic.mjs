@@ -38,3 +38,12 @@ export function formatMilliSecondsToTimeString(msec) {
 
     return out
 }
+
+/* In: (string) hour, min, sec
+    Out: (number) msec */
+export function timeToMilliseconds(hour = 0, min = 0, sec = 0) {
+    let msec = 0
+    msec = hour * 3.6e6 + min * 6e4 + sec * 1000
+
+    return msec
+}

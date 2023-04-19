@@ -11,8 +11,9 @@ qt_standard_project_setup()
 
 qt_add_executable(appTimeAlerter
     main.cpp
-    backend.h
-    backend.cpp
+    backend.h backend.cpp
+    httphandler.h httphandler.cpp
+    filehandler.h filehandler.cpp
 )
 
 qt_add_qml_module(appTimeAlerter
@@ -20,6 +21,7 @@ qt_add_qml_module(appTimeAlerter
     VERSION 1.0
     QML_FILES Main.qml
     Sliders.qml
+    TimeRow.qml
     logic.mjs
 
 )
