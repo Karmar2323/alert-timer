@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Window
 import QtQuick.Controls
+import QtQuick.Layouts
 import TimeAlerter
 import "logic.mjs" as Logic
 
@@ -12,25 +13,32 @@ ApplicationWindow {
     title: qsTr("Time Alerter")
     property string timeCount: Logic.formatMilliSecondsToTimeString(Backend.timeLeft)
 
-    Grid {
+    GridLayout {
         id: uiGrid
         columns: 3
         rows: 3
-        spacing: 10
-        padding: 10
+        rowSpacing: 10
 
         Rectangle {
             id: startRect
             width: 80; height: 50
-            color: Backend.counterOn ? "red" : "lightgreen"
+            x: 5
+            y: 5
+            color: Backend.counterOn ? "red" : "lightblue"
+            border.color: "gray"
+            border.width: 2
             Column {
                 spacing: 2
 
                 Text {
+                    x: 5
+                    y: 5
                     text: qsTr("Alert timer: ")
                 }
 
                 Row {
+                    x: 5
+                    y: 5
 
                     Button {
                         text: "Start"
@@ -49,17 +57,17 @@ ApplicationWindow {
 
         }
 
-        Rectangle { color: "lightgreen"; width: 150; height: 50
+        Rectangle { color: "lightblue"; width: 200; height: 50
+            border.color: "gray"
+            border.width: 2
+            x: 2
+            y: 2
 
-            Column {
-
-                Text {
-                    text: qsTr("Timeout: " + Backend.defaultTimeout * 0.001 + " s")
-                }
-
-                Text {
-                    text: qsTr("Left: ") + window.timeCount
-                }
+            Text {
+                x: 5
+                y: 5
+                font.pointSize: 20
+                text: qsTr("Left: ") + window.timeCount
             }
         }
 
@@ -68,7 +76,9 @@ ApplicationWindow {
             color: Backend.alarm ? "red" : "yellow"
             width: 80
             height: 80
-            border.color: "black"
+            x: 2
+            y: 2
+            border.color: "gray"
             border.width: 5
             radius: 50
 
@@ -91,7 +101,7 @@ ApplicationWindow {
 
             Text {
                 text: window.timeCount
-                color: "black"
+                color: "gray"
                 anchors.verticalCenter: alarmRect.verticalCenter
                 anchors.horizontalCenter: alarmRect.horizontalCenter
                 font.bold: true
@@ -124,6 +134,4 @@ ApplicationWindow {
             text: qsTr("ALARM! \n(Press Esc to close or click Stop)")
         }
     }
-
-
 }
