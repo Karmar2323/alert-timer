@@ -47,3 +47,32 @@ export function timeToMilliseconds(hour = 0, min = 0, sec = 0) {
 
     return msec
 }
+
+/* In: compId (id of component with text field that has numbers), delta (number to add)  */
+export function addNumberToTextField(compId, delta) {
+
+    if(compId.text.length < 1) {
+        compId.text = "00"
+    }
+
+    let temp
+    try {
+        temp = Number.parseInt(compId.text)
+    }
+    catch(e){
+        console.log(e)
+        return
+    }
+
+    temp = temp + delta
+
+    if(temp > 99 || temp < 0) {
+        return
+    }
+
+    if(Number.isNaN(temp)) {
+        temp = 0
+    }
+
+    compId.text = temp.toString()
+}

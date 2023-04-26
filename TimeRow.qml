@@ -15,17 +15,11 @@ Item {
 
         Row {
             id: timeSetupNumbers
-            TextInput {
-                id: hourInput
-                focus: true
-                x: 5
-                font.pointSize: 20
-                text: "00"
-                maximumLength: 2
-                validator: IntValidator{bottom: 0; top: 99}
-                onEditingFinished: submitTime()
 
-
+            Loader {
+                id: hourInputLoader
+                sourceComponent: hourMinSecInput
+                onLoaded: hourInputLoader.item.text = "00"
             }
             Text {
                 text: "h"
@@ -57,37 +51,52 @@ Item {
         Row{
             id: timeSetupButtons
             anchors.top: timeSetupNumbers.bottom
+            spacing: 10
 
             Column{
                 Button {
                     y: 5
+                    autoRepeat: true
                     text: qsTr("+1 h")
-                    onClicked: () => {
-                                   let temp = Number.parseInt(hourInput.text)
-                                   if(temp > 98) {
-                                       return
-                                   }
-
-                                   hourInput.text = (temp + 1).toString()
-                                   console.log(hourInput.text)
-                               }
+                    onClicked: Logic.addNumberToTextField(hourInputLoader.item, +1)
                 }
                 Button {
                     y: 5
-                    text: qsTr("-1 h")
-                    onClicked: () => {
-                                   let temp = Number.parseInt(hourInput.text)
-                                   if(temp < 1) {
-                                       return
-                                   }
-
-                                   hourInput.text = (temp - 1).toString()
-                                   console.log(hourInput.text)
-                               }
+                    autoRepeat: true
+                    text: qsTr("-1 h ")
+                    onClicked: Logic.addNumberToTextField(hourInputLoader.item, -1)
                 }
             }
 
+            Column{
+                Button {
+                    y: 5
+                    autoRepeat: true
+                    text: qsTr("+1 min")
+                    onClicked: Logic.addNumberToTextField(minInputLoader.item, +1)
+                }
+                Button {
+                    y: 5
+                    autoRepeat: true
+                    text: qsTr("-1 min ")
+                    onClicked: Logic.addNumberToTextField(minInputLoader.item, -1)
+                }
+            }
 
+            Column{
+                Button {
+                    y: 5
+                    autoRepeat: true
+                    text: qsTr("+1 s")
+                    onClicked: Logic.addNumberToTextField(secInputLoader.item, +1)
+                }
+                Button {
+                    y: 5
+                    autoRepeat: true
+                    text: qsTr("-1 s ")
+                    onClicked: Logic.addNumberToTextField(secInputLoader.item, -1)
+                }
+            }
         }
     }
 
@@ -103,8 +112,10 @@ Item {
         }
     }
 
+
     function submitTime(){
-        Backend.setAlertTime(Logic.timeToMilliseconds(hourInput.text,
+        Backend.setAlertTime(Logic.timeToMilliseconds(hourInputLoader.item.text,
                             minInputLoader.item.text, secInputLoader.item.text))
     }
+
 }

@@ -20,7 +20,6 @@ qt_add_qml_module(appTimeAlerter
     URI TimeAlerter
     VERSION 1.0
     QML_FILES Main.qml
-    Sliders.qml
     TimeRow.qml
     logic.mjs
 

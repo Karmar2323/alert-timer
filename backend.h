@@ -7,7 +7,6 @@
 #include <QTimer>
 #include <QQmlEngine>
 
-
 class Backend : public QObject
 {
     Q_OBJECT
@@ -24,7 +23,7 @@ public:
     Q_INVOKABLE void stopCounting();
     int defaultTimeout() const;
     int timeLeft() const;
-
+    int m_alarmDuration = 30000;
 
     bool alertTime() const;
     Q_INVOKABLE void setAlertTime(int newAlertTime);
@@ -40,7 +39,6 @@ private:
 
     int m_defaultTimeout = 4000;//1.8e6 + 5000;
     int m_timeLeft = 0;
-    int m_alarmDuration = 30000;//1800000;
     bool m_alarm = false; // set true when counter zeroes
 
     bool counterOn() const;

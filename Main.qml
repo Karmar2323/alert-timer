@@ -15,47 +15,11 @@ ApplicationWindow {
 
     GridLayout {
         id: uiGrid
-        columns: 3
-        rows: 3
+        columns: 2
+        rows: 2
         rowSpacing: 10
 
-        Rectangle {
-            id: startRect
-            width: 80; height: 50
-            x: 5
-            y: 5
-            color: Backend.counterOn ? "red" : "lightblue"
-            border.color: "gray"
-            border.width: 2
-            Column {
-                spacing: 2
 
-                Text {
-                    x: 5
-                    y: 5
-                    text: qsTr("Alert timer: ")
-                }
-
-                Row {
-                    x: 5
-                    y: 5
-
-                    Button {
-                        text: "Start"
-                        onClicked: Backend.startCounting()
-                    }
-                    Button {
-                        text: "Stop"
-                        onClicked: () => {
-                                       Backend.stopCounting() //cancel upcoming alarm
-                                       Backend.alarm = false // stop current alarm
-                                   }
-                    }
-
-                }
-            }
-
-        }
 
         Rectangle { color: "lightblue"; width: 200; height: 50
             border.color: "gray"
@@ -109,14 +73,47 @@ ApplicationWindow {
             }
         }
 
-    }
 
-    TimeRow {
-        id: timeTextInputs
-        width: 16
-        height: 16
-        anchors.top: uiGrid.bottom
-        x: 10
+        TimeRow {
+            id: timeTextInputs
+            width: 16
+            height: 16
+            x: 10
+        }
+
+        Rectangle {
+            id: startRect
+            width: 80; height: 50
+            x: 5
+            y: 5
+            color: Backend.counterOn ? "red" : "lightblue"
+            border.color: "gray"
+            border.width: 2
+            Column {
+                spacing: 2
+
+                Text {
+                    x: 5
+                    y: 5
+                    text: qsTr("Alert timer: ")
+                }
+
+                Row {
+                    x: 5
+                    y: 5
+
+                    Button {
+                        text: "Start"
+                        onClicked: Backend.startCounting()
+                    }
+                    Loader {
+                        sourceComponent: stopButton
+                    }
+
+                }
+            }
+
+        }
     }
 
     Popup {
@@ -132,6 +129,24 @@ ApplicationWindow {
         dim: true
         contentItem: Text {
             text: qsTr("ALARM! \n(Press Esc to close or click Stop)")
+        }
+        onOpened: window.alert(Backend.alarmDuration)
+
+        Loader {
+            x: 80
+            y: 50
+            sourceComponent: stopButton
+        }
+    }
+
+    Component {
+        id: stopButton
+        Button {
+            text: "Stop"
+            onClicked: () => {
+                           Backend.stopCounting() //cancel upcoming alarm
+                           Backend.alarm = false // stop current alarm
+                       }
         }
     }
 }
