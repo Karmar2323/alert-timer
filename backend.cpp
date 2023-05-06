@@ -15,6 +15,14 @@ void Backend::setTimeLeftProperty(){
     setTimeLeft(m_alertCounter.remainingTime());
 }
 
+void Backend::setAlarmDuration(int newAlarmDuration)
+{
+    if (m_alarmDuration == newAlarmDuration)
+        return;
+    m_alarmDuration = newAlarmDuration;
+    emit alarmDurationChanged();
+}
+
 void Backend::setAlertCounter(int newValue) {
     //update timer timeout
     m_alertCounter.setInterval(newValue);
@@ -89,6 +97,11 @@ void Backend::setDefaultTimeout(int newDefaultTimeout)
 int Backend::timeLeft() const
 {
     return m_timeLeft;
+}
+
+int Backend::alarmDuration() const
+{
+    return m_alarmDuration;
 }
 
 void Backend::setAlertTime(int newAlertTime)

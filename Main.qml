@@ -7,8 +7,8 @@ import "logic.mjs" as Logic
 
 ApplicationWindow {
     id: window
-    width: 400
-    height: 300
+    width: 300
+    height: 20
     visible: true
     title: qsTr("Time Alerter")
     property string timeCount: Logic.formatMilliSecondsToTimeString(Backend.timeLeft)
@@ -19,20 +19,37 @@ ApplicationWindow {
         rows: 2
         rowSpacing: 10
 
-
-
-        Rectangle { color: "lightblue"; width: 200; height: 50
+        Rectangle { color: "lightblue"; width: 200; height: 80
+            id: timeCountRect
             border.color: "gray"
             border.width: 2
             x: 2
             y: 2
 
-            Text {
-                x: 5
-                y: 5
-                font.pointSize: 20
-                text: qsTr("Left: ") + window.timeCount
+            Column {
+                Text {
+                    x: 5
+                    y: 5
+                    font.pointSize: 20
+                    text: qsTr("Left: ") + window.timeCount
+                }
+
+                Text {
+                    x: 5
+                    text: "Alarm turns off after " + Backend.alarmDuration * 0.001 + " s"
+                }
+
+                Slider {
+                    id: alarmSlider
+                    width: timeCountRect.width - 10
+                    x: 5
+                    from: 1.0
+                    value: 30.0
+                    to: 300.0
+                    onMoved: Backend.alarmDuration = Math.round(value)* 1000
+                }
             }
+
         }
 
         Rectangle {
@@ -118,10 +135,10 @@ ApplicationWindow {
 
     Popup {
         id: alertPopup
-        x: 100
-        y: 100
+        x: 10
+        y: 50
         width: 200
-        height: 150
+        height: 100
         modal: false
         focus: true
         closePolicy: Popup.CloseOnEscape || Popup.CloseOnPressOutsideParent

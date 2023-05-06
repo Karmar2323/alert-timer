@@ -15,7 +15,7 @@ Item {
 
         Row {
             id: timeSetupNumbers
-
+            x: 5
             Loader {
                 id: hourInputLoader
                 sourceComponent: hourMinSecInput
@@ -49,6 +49,7 @@ Item {
         }
 
         Row{
+            x: 5
             id: timeSetupButtons
             anchors.top: timeSetupNumbers.bottom
             spacing: 10
