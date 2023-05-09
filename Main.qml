@@ -8,7 +8,7 @@ import "logic.mjs" as Logic
 ApplicationWindow {
     id: window
     width: 300
-    height: 20
+    height: 320
     visible: true
     title: qsTr("Time Alerter")
     property string timeCount: Logic.formatMilliSecondsToTimeString(Backend.timeLeft)
@@ -16,7 +16,7 @@ ApplicationWindow {
     GridLayout {
         id: uiGrid
         columns: 2
-        rows: 2
+        rows: 4
         rowSpacing: 10
 
         Rectangle { color: "lightblue"; width: 200; height: 80
@@ -98,39 +98,85 @@ ApplicationWindow {
             x: 10
         }
 
-        Rectangle {
-            id: startRect
-            width: 80; height: 50
-            x: 5
-            y: 5
-            color: Backend.counterOn ? "red" : "lightblue"
-            border.color: "gray"
-            border.width: 2
-            Column {
-                spacing: 2
+        Column {
+            Rectangle {
+                id: startRect
+                width: 80; height: 50
+                x: 5
+                y: 5
+                color: Backend.counterOn ? "red" : "lightblue"
+                border.color: "gray"
+                border.width: 2
+                Column {
+                    spacing: 2
 
-                Text {
-                    x: 5
-                    y: 5
-                    text: qsTr("Alert timer: ")
-                }
-
-                Row {
-                    x: 5
-                    y: 5
-
-                    Button {
-                        text: "Start"
-                        onClicked: Backend.startCounting()
-                    }
-                    Loader {
-                        sourceComponent: stopButton
+                    Text {
+                        x: 5
+                        y: 5
+                        text: qsTr("Alert timer: ")
                     }
 
+                    Row {
+                        x: 5
+                        y: 5
+
+                        Button {
+                            text: "Start"
+                            onClicked: Backend.startCounting()
+                        }
+                        Loader {
+                            sourceComponent: stopButton
+                        }
+
+                    }
                 }
+
             }
 
+            Rectangle {
+                id: radioButtonRect
+                color: "lightblue"
+                border.color: "gray"
+                border.width: 2
+                width: 80
+                height: 80
+                x: 5
+                y: 5
+
+                Column {
+                    Text {
+                        x: 5
+                        y: 5
+                        text: qsTr("Alarms:")
+                    }
+
+                    CheckBox {
+                        x: 5
+                        y: 5
+                        id: popupButton
+                        checked: true
+                        text: qsTr("Popup")
+                    }
+
+                    CheckBox {
+                        x: 5
+                        y: 5
+                        id: ledButton
+                        checked: false
+                        text: qsTr("LED")
+                        nextCheckState: () => {
+                                            if(checkState === Qt.Checked) {
+                                                checked = false
+                                            }
+                                            console.log("alarm not available")
+                                        }
+                    }
+                }
+
+            }
         }
+
+
     }
 
     Popup {
@@ -142,7 +188,7 @@ ApplicationWindow {
         modal: false
         focus: true
         closePolicy: Popup.CloseOnEscape || Popup.CloseOnPressOutsideParent
-        visible: Backend.alarm
+        visible: Backend.alarm && popupButton.checked
         dim: true
         contentItem: Text {
             text: qsTr("ALARM! \n(Press Esc to close or click Stop)")
