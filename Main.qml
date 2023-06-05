@@ -165,10 +165,19 @@ ApplicationWindow {
                         checked: false
                         text: qsTr("LED")
                         nextCheckState: () => {
+                                            // backend checks LED availability
                                             if(checkState === Qt.Checked) {
-                                                checked = false
+                                                if(Backend.findLED() !== true) {
+                                                    checked = false
+                                                    console.log("LED not available")
+                                                    // TODO info popup
+                                                }
+                                                else {
+                                                    console.log("LED available")
+                                                    //Backend. TODO
+                                                }
                                             }
-                                            console.log("alarm not available")
+
                                         }
                     }
                 }
@@ -200,6 +209,22 @@ ApplicationWindow {
             y: 50
             sourceComponent: stopButton
         }
+    }
+
+    Dialog {
+        id: alarmInfoDialog
+        width: 200
+        height: 100
+        x:100
+        y:100
+        title: "Alarm info:"
+        modal: false
+        standardButtons: Dialog.Ok
+        visible: false // TODO
+        contentItem: Text {
+            text: qsTr("Unable to activate.")
+        }
+
     }
 
     Component {

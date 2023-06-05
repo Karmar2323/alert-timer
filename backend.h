@@ -6,6 +6,7 @@
 #include <QObject>
 #include <QTimer>
 #include <QQmlEngine>
+#include <QString>
 
 class Backend : public QObject
 {
@@ -33,12 +34,14 @@ public:
     void setAlarm(bool newAlarm);
 
     int alarmDuration() const;
+    bool findLED();
 
 private:
     bool m_counterOn;
 
     QTimer m_alertCounter;
     QTimer m_timeLeftTimer;
+    QString m_corePropsPath;
 
     int m_defaultTimeout = 4000;//1.8e6 + 5000;
     int m_timeLeft = 0;
@@ -53,6 +56,9 @@ private:
     void setDefaultTimeout(int newDefaultTimeout);
     void setTimeLeftProperty();
     void setAlarmDuration(int newAlarmDuration);
+    QString chooseCorePropsPath();
+    QString getRealWinPath(QString *filePath);
+    void readCoreProps();
 
 public slots:
     void stopAlarm();

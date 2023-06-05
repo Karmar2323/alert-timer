@@ -9,6 +9,8 @@ Backend::Backend()
     QObject::connect(&m_alertCounter, &QTimer::timeout, this, &Backend::stopCounting);
     QObject::connect(&m_alertCounter, &QTimer::timeout, this, &Backend::soundAlarm);
     QObject::connect(&m_timeLeftTimer, &QTimer::timeout, this, &Backend::setTimeLeftProperty);
+
+    m_corePropsPath = chooseCorePropsPath();
 }
 
 void Backend::setTimeLeftProperty(){
@@ -21,6 +23,39 @@ void Backend::setAlarmDuration(int newAlarmDuration)
         return;
     m_alarmDuration = newAlarmDuration;
     emit alarmDurationChanged();
+}
+
+QString Backend::chooseCorePropsPath()
+{
+    QString filePath;
+    QString pathEnd = "/SteelSeries Engine 3/coreProps.json";
+
+#ifdef Q_OS_WINDOWS
+    filePath = "%PROGRAMDATA%/SteelSeries" + pathEnd;
+    filePath = getRealWinPath(&filePath);
+#elif defined(Q_OS_DARWIN)
+    filePath = "/Library/Application Support" + pathEnd;
+#endif
+
+    qDebug() << "filePath: " << filePath;
+
+    return filePath;
+}
+
+QString Backend::getRealWinPath(QString* filePath){
+
+    QChar *unwanted = filePath->begin();
+
+    filePath->remove(*unwanted); //filePath->remove("%");
+    filePath->prepend("C:/");
+
+    return *filePath;
+
+}
+
+void Backend::readCoreProps()
+{
+
 }
 
 void Backend::setAlertCounter(int newValue) {
@@ -102,6 +137,13 @@ int Backend::timeLeft() const
 int Backend::alarmDuration() const
 {
     return m_alarmDuration;
+}
+
+bool Backend::findLED()
+{
+    bool ledStatus = false;
+    // TODO try LED
+    return ledStatus;
 }
 
 void Backend::setAlertTime(int newAlertTime)
