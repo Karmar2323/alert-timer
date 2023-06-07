@@ -4,13 +4,20 @@
 
 
 #include <QObject>
-#include <QDataStream>
+#include <QFile>
+#include <QJsonObject>
+#include <QJsonDocument>
 
 class FileHandler : public QObject
 {
     Q_OBJECT
 public:
     explicit FileHandler(QObject *parent = nullptr);
+
+    QJsonObject readJsonFile(QString fileName);
+    QByteArray readFile(QString fileName);
+
+private:
 
 signals:
 
