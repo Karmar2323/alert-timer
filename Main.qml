@@ -162,22 +162,19 @@ ApplicationWindow {
                         x: 5
                         y: 5
                         id: ledButton
-                        checked: false
+                        checked: Backend.getLedStatus()
+                        checkable: true
                         text: qsTr("LED")
                         nextCheckState: () => {
+                                            console.log ("ledButton.checked", checked)
                                             // backend checks LED availability
-                                            if(checkState === Qt.Checked) {
-                                                if(Backend.findLED() !== true) {
-                                                    checked = false
-                                                    console.log("LED not available")
-                                                    // TODO info popup
+                                                if(checkState === Qt.Checked && Backend.findLED() !== true) {
+                                                    ledButton.text = qsTr("LED: error")
+                                                    return Qt.Unchecked
                                                 }
-                                                else {
-                                                    console.log("LED available")
-                                                    //Backend. TODO
+                                                if (checkState === Qt.Unchecked && Backend.findLED() === true){
+                                                    return Qt.Checked
                                                 }
-                                            }
-
                                         }
                     }
                 }

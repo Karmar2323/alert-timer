@@ -7,6 +7,10 @@
 #include <QTimer>
 #include <QQmlEngine>
 #include <QString>
+#include <QJsonObject>
+#include <QPointer>
+
+#include "filehandler.h"
 
 class Backend : public QObject
 {
@@ -34,7 +38,13 @@ public:
     void setAlarm(bool newAlarm);
 
     int alarmDuration() const;
-    bool findLED();
+    Q_INVOKABLE bool findLED();
+
+    QString getLedAddress() const;
+    void setLedAddress(const QString &newLedAddress);
+
+    Q_INVOKABLE bool getLedStatus() const;
+    void setLedStatus(bool newLedStatus);
 
 private:
     bool m_counterOn;
@@ -42,7 +52,9 @@ private:
     QTimer m_alertCounter;
     QTimer m_timeLeftTimer;
     QString m_corePropsPath;
+    QString m_ledAddress;
 
+    bool m_ledStatus = true;
     int m_defaultTimeout = 4000;//1.8e6 + 5000;
     int m_timeLeft = 0;
     bool m_alarm = false; // set true when counter zeroes

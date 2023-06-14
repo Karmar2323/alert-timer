@@ -11,11 +11,15 @@ Backend::Backend()
     QObject::connect(&m_timeLeftTimer, &QTimer::timeout, this, &Backend::setTimeLeftProperty);
 
     m_corePropsPath = chooseCorePropsPath();
+    m_ledStatus = findLED();
+
 }
+
 
 void Backend::setTimeLeftProperty(){
     setTimeLeft(m_alertCounter.remainingTime());
 }
+
 
 void Backend::setAlarmDuration(int newAlarmDuration)
 {
@@ -24,6 +28,27 @@ void Backend::setAlarmDuration(int newAlarmDuration)
     m_alarmDuration = newAlarmDuration;
     emit alarmDurationChanged();
 }
+
+QString Backend::getLedAddress() const
+{
+    return m_ledAddress;
+}
+
+void Backend::setLedAddress(const QString &newLedAddress)
+{
+    m_ledAddress = newLedAddress;
+}
+
+bool Backend::getLedStatus() const
+{
+    return m_ledStatus;
+}
+
+void Backend::setLedStatus(bool newLedStatus)
+{
+    m_ledStatus = newLedStatus;
+}
+
 
 QString Backend::chooseCorePropsPath()
 {
@@ -42,6 +67,7 @@ QString Backend::chooseCorePropsPath()
     return filePath;
 }
 
+
 QString Backend::getRealWinPath(QString* filePath){
 
     QChar *unwanted = filePath->begin();
@@ -57,6 +83,42 @@ void Backend::readCoreProps()
 {
 
 }
+
+
+bool Backend::findLED()
+{
+
+    QString address = "";
+    QPointer<FileHandler> FH = new FileHandler;
+    QJsonObject jsonObj = FH->readJsonFile(m_corePropsPath);
+
+    // check obj
+    if (jsonObj.value("address").isUndefined()) {
+        // undefined key
+        setLedAddress(address);
+        setLedStatus(false);
+    }
+    else if (jsonObj.value("address").isString()) {
+        address = jsonObj.value("address").toString();
+
+        if (address.size() > 8) {
+            // good address
+            setLedAddress(address);
+            setLedStatus(true);
+            // TODO use address try LED
+        }
+        else setLedStatus(false);
+
+    }
+    else setLedStatus(false);
+
+    qDebug() << "LedAddress: " << getLedAddress();
+
+    FH = 0;
+    return getLedStatus();
+
+}
+
 
 void Backend::setAlertCounter(int newValue) {
     //update timer timeout
@@ -137,13 +199,6 @@ int Backend::timeLeft() const
 int Backend::alarmDuration() const
 {
     return m_alarmDuration;
-}
-
-bool Backend::findLED()
-{
-    bool ledStatus = false;
-    // TODO try LED
-    return ledStatus;
 }
 
 void Backend::setAlertTime(int newAlertTime)
