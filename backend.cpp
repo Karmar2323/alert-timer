@@ -1,3 +1,5 @@
+// Copyright (C) 2023 Markus Karjalainen
+// License: LGPL-3.0-only OR GPL-2.0-only OR GPL-3.0-only
 
 #include "backend.h"
 
@@ -11,7 +13,21 @@ Backend::Backend()
     QObject::connect(&m_timeLeftTimer, &QTimer::timeout, this, &Backend::setTimeLeftProperty);
 
     m_corePropsPath = chooseCorePropsPath();
-    m_ledStatus = findLED();
+    m_ledStatus = findLED(m_corePropsPath);
+
+    if (m_ledStatus) {
+        // set up message
+        setupLedMessage();
+        // send it
+    }
+}
+
+
+QJsonObject Backend::setupLedMessage() {
+
+    QJsonObject jsonObj;
+
+    return jsonObj;
 
 }
 
@@ -79,18 +95,17 @@ QString Backend::getRealWinPath(QString* filePath){
 
 }
 
-void Backend::readCoreProps()
+
+bool Backend::findLED(QString propsPath)
 {
 
-}
-
-
-bool Backend::findLED()
-{
+    if (propsPath.size() < 2) {
+        propsPath = m_corePropsPath;
+    }
 
     QString address = "";
     QPointer<FileHandler> FH = new FileHandler;
-    QJsonObject jsonObj = FH->readJsonFile(m_corePropsPath);
+    QJsonObject jsonObj = FH->readJsonFile(propsPath);
 
     // check obj
     if (jsonObj.value("address").isUndefined()) {
@@ -105,7 +120,6 @@ bool Backend::findLED()
             // good address
             setLedAddress(address);
             setLedStatus(true);
-            // TODO use address try LED
         }
         else setLedStatus(false);
 

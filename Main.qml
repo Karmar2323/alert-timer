@@ -1,3 +1,6 @@
+// Copyright (C) 2023 Markus Karjalainen
+// License: LGPL-3.0-only OR GPL-2.0-only OR GPL-3.0-only
+
 import QtQuick
 import QtQuick.Window
 import QtQuick.Controls
@@ -12,6 +15,7 @@ ApplicationWindow {
     visible: true
     title: qsTr("Time Alerter")
     property string timeCount: Logic.formatMilliSecondsToTimeString(Backend.timeLeft)
+    property string boxColor: "lightgreen"
 
     GridLayout {
         id: uiGrid
@@ -19,7 +23,8 @@ ApplicationWindow {
         rows: 4
         rowSpacing: 10
 
-        Rectangle { color: "lightblue"; width: 200; height: 80
+
+        Rectangle { color: boxColor; width: 200; height: 80
             id: timeCountRect
             border.color: "gray"
             border.width: 2
@@ -45,12 +50,13 @@ ApplicationWindow {
                     x: 5
                     from: 1.0
                     value: 30.0
-                    to: 300.0
+                    to: 600.0
                     onMoved: Backend.alarmDuration = Math.round(value)* 1000
                 }
             }
 
         }
+
 
         Rectangle {
             id: alarmRect
@@ -96,17 +102,18 @@ ApplicationWindow {
             width: 16
             height: 16
             x: 10
+            rectColor: boxColor
         }
 
-        Column {
             Rectangle {
                 id: startRect
                 width: 80; height: 50
                 x: 5
                 y: 5
-                color: Backend.counterOn ? "red" : "lightblue"
+                color: Backend.counterOn ? "red" : boxColor
                 border.color: "gray"
                 border.width: 2
+
                 Column {
                     spacing: 2
 
@@ -134,14 +141,17 @@ ApplicationWindow {
             }
 
             Rectangle {
+
+            }
+
+            Rectangle {
                 id: radioButtonRect
-                color: "lightblue"
+                color: boxColor
                 border.color: "gray"
                 border.width: 2
                 width: 80
                 height: 80
-                x: 5
-                y: 5
+
 
                 Column {
                     Text {
@@ -152,7 +162,6 @@ ApplicationWindow {
 
                     CheckBox {
                         x: 5
-                        y: 5
                         id: popupButton
                         checked: true
                         text: qsTr("Popup")
@@ -160,7 +169,6 @@ ApplicationWindow {
 
                     CheckBox {
                         x: 5
-                        y: 5
                         id: ledButton
                         checked: Backend.getLedStatus()
                         checkable: true
@@ -173,15 +181,16 @@ ApplicationWindow {
                                                     return Qt.Unchecked
                                                 }
                                                 if (checkState === Qt.Unchecked && Backend.findLED() === true){
+                                                    ledButton.text = qsTr("LED")
                                                     return Qt.Checked
                                                 }
                                         }
                     }
+
+
                 }
 
             }
-        }
-
 
     }
 
@@ -208,21 +217,6 @@ ApplicationWindow {
         }
     }
 
-    Dialog {
-        id: alarmInfoDialog
-        width: 200
-        height: 100
-        x:100
-        y:100
-        title: "Alarm info:"
-        modal: false
-        standardButtons: Dialog.Ok
-        visible: false // TODO
-        contentItem: Text {
-            text: qsTr("Unable to activate.")
-        }
-
-    }
 
     Component {
         id: stopButton

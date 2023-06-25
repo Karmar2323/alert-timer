@@ -1,3 +1,6 @@
+// Copyright (C) 2023 Markus Karjalainen
+// License: LGPL-3.0-only OR GPL-2.0-only OR GPL-3.0-only
+
 import QtQuick
 import QtQuick.Controls
 import TimeAlerter
@@ -5,9 +8,10 @@ import "logic.mjs" as Logic
 
 Item {
     id: root
+    property string rectColor: "lightblue"
 
     Rectangle {
-        color: "lightblue"
+        color: rectColor
         width: 200
         height: 90
         border.color: "gray"

@@ -38,7 +38,7 @@ public:
     void setAlarm(bool newAlarm);
 
     int alarmDuration() const;
-    Q_INVOKABLE bool findLED();
+    Q_INVOKABLE bool findLED(QString propsPath = "");
 
     QString getLedAddress() const;
     void setLedAddress(const QString &newLedAddress);
@@ -70,7 +70,7 @@ private:
     void setAlarmDuration(int newAlarmDuration);
     QString chooseCorePropsPath();
     QString getRealWinPath(QString *filePath);
-    void readCoreProps();
+    QJsonObject setupLedMessage();
 
 public slots:
     void stopAlarm();

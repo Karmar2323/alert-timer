@@ -22,7 +22,6 @@ qt_add_qml_module(appTimeAlerter
     QML_FILES Main.qml
     TimeRow.qml
     logic.mjs
-
 )
 
 set_target_properties(appTimeAlerter PROPERTIES
