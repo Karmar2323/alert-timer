@@ -14,6 +14,7 @@ qt_add_executable(appTimeAlerter
     backend.h backend.cpp
     httphandler.h httphandler.cpp
     filehandler.h filehandler.cpp
+    jsonhandler.h
 )
 
 qt_add_qml_module(appTimeAlerter

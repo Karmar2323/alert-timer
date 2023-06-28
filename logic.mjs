@@ -34,9 +34,22 @@ export function formatMilliSecondsToTimeString(msec) {
         sStr = sec.toString()
     }
 
+    hStr = prependZeroString(hStr)
+    mStr = prependZeroString(mStr)
+    sStr = prependZeroString(sStr)
+
     let out = hStr + "." + mStr + "." + sStr
 
     return out
+}
+
+
+function prependZeroString (input) {
+    if(input.length < 2) {
+        return "0" + input
+    }
+    else return input
+
 }
 
 /* In: (string) hour, min, sec
@@ -75,4 +88,9 @@ export function addNumberToTextField(compId, delta) {
     }
 
     compId.text = temp.toString()
+}
+
+export function stopAlarm (Backend) {
+    Backend.stopCounting() //cancel upcoming alarm
+    Backend.alarm = false // stop current alarm
 }

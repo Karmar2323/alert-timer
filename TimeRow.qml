@@ -10,12 +10,7 @@ Item {
     id: root
     property string rectColor: "lightblue"
 
-    Rectangle {
-        color: rectColor
-        width: 200
-        height: 90
-        border.color: "gray"
-        border.width: 2
+    Item {
 
         Row {
             id: timeSetupNumbers
@@ -32,6 +27,7 @@ Item {
             Loader {
                 id: minInputLoader
                 sourceComponent: hourMinSecInput
+                onLoaded: minInputLoader.item.text = "00"
             }
             Text {
                 text: "m"
@@ -110,7 +106,7 @@ Item {
         TextInput {
             focus: true
             font.pointSize: 20
-            text: "30"
+            text: "03"
             maximumLength: 2
             validator: IntValidator{bottom: 0; top: 59}
             onEditingFinished: submitTime()
@@ -119,8 +115,9 @@ Item {
 
 
     function submitTime(){
-        Backend.setAlertTime(Logic.timeToMilliseconds(hourInputLoader.item.text,
-                            minInputLoader.item.text, secInputLoader.item.text))
+        let alertTime = Logic.timeToMilliseconds(hourInputLoader.item.text,
+                                             minInputLoader.item.text, secInputLoader.item.text)
+        Backend.setAlertTime(alertTime)
     }
 
 }
