@@ -18,28 +18,32 @@ Item {
             Loader {
                 id: hourInputLoader
                 sourceComponent: hourMinSecInput
-                onLoaded: hourInputLoader.item.text = "00"
+                // limit hours to avoid overflow
+                onLoaded: hourInputLoader.item.validator.top = 99
             }
             Text {
                 text: "h"
                 font.pointSize: 16
+                y:5
             }
             Loader {
                 id: minInputLoader
                 sourceComponent: hourMinSecInput
-                onLoaded: minInputLoader.item.text = "00"
             }
             Text {
                 text: "m"
                 font.pointSize: 16
+                y:5
             }
             Loader {
                 id: secInputLoader
                 sourceComponent: hourMinSecInput
+                onLoaded: secInputLoader.item.text = "03"
             }
             Text {
                 text: "s"
                 font.pointSize: 16
+                y:5
             }
             Button {
                 y: 5
@@ -106,7 +110,7 @@ Item {
         TextInput {
             focus: true
             font.pointSize: 20
-            text: "03"
+            text: "00"
             maximumLength: 2
             validator: IntValidator{bottom: 0; top: 59}
             onEditingFinished: submitTime()

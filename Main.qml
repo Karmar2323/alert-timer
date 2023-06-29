@@ -11,11 +11,12 @@ import "logic.mjs" as Logic
 ApplicationWindow {
     id: window
     width: 300
-    height: 420
+    height: 320
     visible: true
     title: qsTr("Time Alerter")
     property string timeCount: Logic.formatMilliSecondsToTimeString(Backend.timeLeft)
     property string boxColor: "lightgreen"
+    property string copyright: "Copyright (C) 2023 Markus Karjalainen"
 
     background: Rectangle {
         color: "darkgray"
@@ -27,15 +28,42 @@ ApplicationWindow {
 
             ToolButton {
                 text: qsTr("Start")
-                icon.name: "menu-open"
                 onClicked: Backend.startCounting()
             }
 
             ToolButton {
+                id: toolBarStop
                 text: qsTr("Stop")
-                icon.name: "menu-open"
                 onClicked: Logic.stopAlarm(Backend)
             }
+
+            CheckBox {
+                height: toolBarStop.height
+                id: popupButton
+                checked: true
+                text: qsTr("Popup ")
+            }
+
+            CheckBox {
+                height: toolBarStop.height
+                id: ledButton
+                checked: Backend.getLedStatus()
+                checkable: true
+                text: qsTr("LED ")
+                nextCheckState: () => {
+                                    console.log ("ledButton.checked", checked)
+                                    // backend checks LED availability
+                                        if(checkState === Qt.Checked && Backend.findLED() !== true) {
+                                            ledButton.text = qsTr("LED: error")
+                                            return Qt.Unchecked
+                                        }
+                                        if (checkState === Qt.Unchecked && Backend.findLED() === true){
+                                            ledButton.text = qsTr("LED")
+                                            return Qt.Checked
+                                        }
+                                }
+            }
+
         }
     }
 
@@ -45,79 +73,45 @@ ApplicationWindow {
             title: qsTr("Info")
 
             ToolButton {
+                text: qsTr("Show/hide extra window")
+                onClicked: () => {
+                               alarmWindow.visible = !alarmWindow.visible
+                               if(alarmWindow.visible) {
+                                   alarmWindow.raise()
+                                   alarmWindow.x = screen.width - 2 * alarmWindow.width
+                                   alarmWindow.y = screen.height - 2 * alarmWindow.height
+                               }
+                           }
+            }
+
+            ToolButton {
                 text: qsTr("About")
-                icon.name: "menu-open"
                 onClicked: aboutDialog.open()
             }
 
             ToolButton {
                 text: qsTr("License")
-                icon.name: "menu-open"
                 onClicked: licenseDialog.open()
             }
+
         }
 
     }
 
-    GridLayout {
-        id: uiGrid
-        columns: 2
-        rows: 4
-        rowSpacing: 10
-
-
-        Rectangle { color: boxColor
-            width: 200
-            height: 200
-            id: timeCountRect
-            border.color: "gray"
-            border.width: 2
-            x: 2
-            y: 2
-
-            Column {
-                Text {
-                    x: 5
-                    y: 5
-                    font.pointSize: 20
-                    text: qsTr("Left: ") + window.timeCount
-                }
-
-                Text {
-                    x: 5
-                    text: "Alarm turns off after " + Backend.alarmDuration * 0.001 + " s"
-                }
-
-                Slider {
-                    id: alarmSlider
-                    width: timeCountRect.width - 10
-                    x: 5
-                    from: 1.0
-                    value: 30.0
-                    to: 600.0
-                    onMoved: Backend.alarmDuration = Math.round(value)* 1000
-                }
-
-                TimeRow {
-                    id: timeTextInputs
-                    width: 16
-                    height: 16
-                    y: 5
-                    rectColor: boxColor
-                }
-
-            }
-
-        }
-
+    Window {
+        id: alarmWindow
+        width: 160
+        height: 100
+        transientParent: null
+        visible: true
+        x: screen.width - alarmWindow.width
+        y: screen.height - alarmWindow.height
 
         Rectangle {
             id: alarmRect
             color: Backend.alarm ? "red" : "yellow"
             width: 80
             height: 80
-            x: 2
-            y: 2
             border.color: "gray"
             border.width: 5
             radius: 50
@@ -148,28 +142,50 @@ ApplicationWindow {
                 opacity: Backend.counterOn ? 1 : 0
             }
         }
+    }
+
+    GridLayout {
+        id: uiGrid
+        columns: 2
+        rows: 4
+        rowSpacing: 10
+
 
         Rectangle {
-            id: startRect
-            width: 80; height: 50
-            x: 5
-            y: 5
-            color: Backend.counterOn ? "red" : boxColor
+            color: Backend.counterOn ? "green" : boxColor
+            width: 200
+            height: 200
+            id: timeCountRect
             border.color: "gray"
             border.width: 2
+            x: 2
+            y: 2
 
             Column {
-                spacing: 2
-
                 Text {
                     x: 5
                     y: 5
-                    text: qsTr("Alert timer: ")
+                    font.pointSize: 20
+                    text: qsTr("Left: ") + window.timeCount
+                }
+
+                Text {
+                    x: 5
+                    text: "Alarm turns off after " + Backend.alarmDuration * 0.001 + " s"
+                }
+
+                Slider {
+                    id: alarmSlider
+                    width: timeCountRect.width - 10
+                    x: 5
+                    from: 1.0
+                    value: 30.0
+                    to: 1800.0
+                    onMoved: Backend.alarmDuration = Math.round(value)* 1000
                 }
 
                 Row {
-                    x: 5
-                    y: 5
+                    x: parent.width * 0.32
 
                     Button {
                         text: "Start"
@@ -180,58 +196,14 @@ ApplicationWindow {
                     }
 
                 }
-            }
 
-        }
-
-        Rectangle {
-            // temporary layout filler
-        }
-
-        Rectangle {
-            id: radioButtonRect
-            color: boxColor
-            border.color: "gray"
-            border.width: 2
-            width: 80
-            height: 80
-
-
-            Column {
-                Text {
-                    x: 5
+                TimeRow {
+                    id: timeTextInputs
+                    width: 16
+                    height: 16
                     y: 5
-                    text: qsTr("Alarms:")
+                    rectColor: boxColor
                 }
-
-                CheckBox {
-                    x: 5
-                    id: popupButton
-                    checked: true
-                    text: qsTr("Popup")
-                }
-
-                CheckBox {
-                    x: 5
-                    id: ledButton
-                    checked: Backend.getLedStatus()
-                    checkable: true
-                    text: qsTr("LED")
-                    nextCheckState: () => {
-                                        console.log ("ledButton.checked", checked)
-                                        // backend checks LED availability
-                                            if(checkState === Qt.Checked && Backend.findLED() !== true) {
-                                                ledButton.text = qsTr("LED: error")
-                                                return Qt.Unchecked
-                                            }
-                                            if (checkState === Qt.Unchecked && Backend.findLED() === true){
-                                                ledButton.text = qsTr("LED")
-                                                return Qt.Checked
-                                            }
-                                    }
-                }
-
-
             }
 
         }
@@ -276,7 +248,7 @@ ApplicationWindow {
         title: qsTr("License")
         Label {
             anchors.fill: parent
-            text: qsTr("License: LGPL or GPL.")
+            text: qsTr("License: \nLGPL-3.0-only OR GPL-2.0-only OR GPL-3.0-only")
             horizontalAlignment: Text.AlignHCenter
         }
 
@@ -288,7 +260,7 @@ ApplicationWindow {
         title: qsTr("About")
         Label {
             anchors.fill: parent
-            text: qsTr("Time Alerter app \nby Markus Karjalainen. \n\nUse the controls to set up an alarm.")
+            text: window.title + qsTr("\n\n" + window.copyright) + qsTr("\n\nSource code repository: \nhttps://github.com/Karmar2323/alert-timer")
             horizontalAlignment: Text.AlignHCenter
         }
 

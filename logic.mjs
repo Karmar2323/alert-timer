@@ -20,7 +20,7 @@ export function formatMilliSecondsToTimeString(msec) {
     allSeconds = allSeconds - sec
     min = allSeconds % 3600
     allSeconds = allSeconds - min
-    hour = allSeconds % 216000
+    hour = allSeconds % 363600 // display 0 ... 101 h
 
     if (hour > 0) {
         hStr = (hour / 3600).toString()
