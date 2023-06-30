@@ -52,7 +52,11 @@ QString Backend::getLedAddress() const
 
 void Backend::setLedAddress(const QString &newLedAddress)
 {
-    m_ledAddress = newLedAddress;
+    //save address and port
+    QString sep = ":";
+    m_port = newLedAddress.section(sep, 1, 1).toInt();
+    m_ledAddress = newLedAddress.section(sep, 0, 0);
+
 }
 
 bool Backend::getLedStatus() const
@@ -126,7 +130,7 @@ bool Backend::findLED(QString propsPath)
     }
     else setLedStatus(false);
 
-    qDebug() << "LedAddress: " << getLedAddress();
+    qDebug() << "LedAddress : " << getLedAddress() << ", port: " << m_port;
 
     FH = 0;
     return getLedStatus();

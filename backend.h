@@ -53,6 +53,7 @@ private:
     QTimer m_timeLeftTimer;
     QString m_corePropsPath;
     QString m_ledAddress;
+    quint16 m_port;
 
     bool m_ledStatus = true;
     int m_defaultTimeout = 4000;//1.8e6 + 5000;
