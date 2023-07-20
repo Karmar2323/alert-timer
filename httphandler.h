@@ -9,18 +9,23 @@
 #include <QNetworkRequest>
 #include <QNetworkReply>
 #include <QJsonObject>
-#include <QPointer>
+
+#include "jsonmessagehandler.h"
 
 class HttpHandler : public QObject
 {
     Q_OBJECT
 public:
     explicit HttpHandler(QObject *parent = nullptr);
-    void postJson(QString destination, quint16 port, QJsonObject data);
+    void postJson(QString destination, quint16 port,
+                  QString endpoint, QJsonObject data);
 private:
-    QPointer<QNetworkAccessManager> QNAM;
+    QNetworkAccessManager *QNAM;
 signals:
-
+private slots:
+    void onReplyFinished(QNetworkReply *reply);
+    void onSlotError(QNetworkReply::NetworkError code);
+    void onSlotReadyRead();
 };
 
 #endif // HTTPHANDLER_H

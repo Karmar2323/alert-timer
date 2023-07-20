@@ -15,20 +15,16 @@ Backend::Backend()
     m_corePropsPath = chooseCorePropsPath();
     m_ledStatus = findLED(m_corePropsPath);
 
+    QPointer JMH = new JsonMessageHandler();
+    QPointer HH = new HttpHandler();
+
     if (m_ledStatus) {
-        // set up message
-        setupLedMessage();
-        // send it
+        // set up registration JSON: get final address and data
+        QJsonObject ledMessage =  JMH->setupLedMessage(JMH->endPoints::registerEp);
+        QString endpoint = ledMessage.take("endpoint").toString();
+        // post it
+        HH->postJson(getLedAddress(), m_port, endpoint, ledMessage);
     }
-}
-
-
-QJsonObject Backend::setupLedMessage() {
-
-    QJsonObject jsonObj;
-
-    return jsonObj;
-
 }
 
 

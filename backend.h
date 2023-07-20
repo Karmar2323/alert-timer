@@ -11,6 +11,8 @@
 #include <QPointer>
 
 #include "filehandler.h"
+#include "httphandler.h"
+#include "jsonmessagehandler.h"
 
 class Backend : public QObject
 {
@@ -71,7 +73,7 @@ private:
     void setAlarmDuration(int newAlarmDuration);
     QString chooseCorePropsPath();
     QString getRealWinPath(QString *filePath);
-    QJsonObject setupLedMessage();
+
 
 public slots:
     void stopAlarm();
