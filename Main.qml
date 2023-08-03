@@ -73,18 +73,6 @@ ApplicationWindow {
             title: qsTr("Info")
 
             ToolButton {
-                text: qsTr("Show/hide extra window")
-                onClicked: () => {
-                               alarmWindow.visible = !alarmWindow.visible
-                               if(alarmWindow.visible) {
-                                   alarmWindow.raise()
-                                   alarmWindow.x = screen.width - 2 * alarmWindow.width
-                                   alarmWindow.y = screen.height - 2 * alarmWindow.height
-                               }
-                           }
-            }
-
-            ToolButton {
                 text: qsTr("About")
                 onClicked: aboutDialog.open()
             }
@@ -96,6 +84,23 @@ ApplicationWindow {
 
         }
 
+        Menu {
+            id: settingMenu
+            title: qsTr("Settings")
+
+            ToolButton {
+                text: alarmWindow.visible ? qsTr("Hide extra window") : qsTr("Show extra window")
+                onClicked: () => {
+                               alarmWindow.visible = !alarmWindow.visible
+                               if(alarmWindow.visible) {
+                                   alarmWindow.raise()
+                                   alarmWindow.x = screen.width - 2 * alarmWindow.width
+                                   alarmWindow.y = screen.height - 2 * alarmWindow.height
+                               }
+                           }
+            }
+
+        }
     }
 
     Window {
@@ -266,4 +271,5 @@ ApplicationWindow {
 
         standardButtons: Dialog.Ok
     }
+
 }

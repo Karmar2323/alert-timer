@@ -14,10 +14,26 @@ JsonMessageHandler::JsonMessageHandler(QObject *parent)
     // "icon_id": 1, "value_optional": false
     //    registerJson.insert("min_value", 3);
     //    registerJson.insert("max_value", 3);
-    // TODO others
 
-    // TODO define JSON handlers
 
+    gameEventJson.insert("game", GAME);
+    gameEventJson.insert("event", EVENT_NAME);
+    QJsonObject dataObj;
+    dataObj.insert("value", QJsonValue(2));
+    QJsonValue dataValue = QJsonValue(dataObj);
+    gameEventJson.insert("data", dataValue);
+
+    removeGameJson.insert("game", GAME);
+
+    removeEventJson.insert("game", GAME);
+    removeEventJson.insert("event", EVENT_NAME);
+
+    bindJson.insert("game", GAME);
+    bindJson.insert("event", EVENT_NAME);
+    bindJson.insert("min_value", 3);
+    bindJson.insert("max_value", 49);
+    // binding requires handlers:
+    // define JSON handlers
     // for mouse illumination:
     QJsonObject handler;
     handler.insert("device-type", QJsonValue("mouse"));
@@ -28,6 +44,10 @@ JsonMessageHandler::JsonMessageHandler(QObject *parent)
     rgb.insert("green", 255);
     rgb.insert("blue", 255);
     handler.insert("color", QJsonValue(rgb).toString());
+    // handlers in array
+    QJsonArray handlerArray;
+    handlerArray.push_back(QJsonValue(handler));
+    bindJson.insert("handlers", QJsonValue(handlerArray));
 
 }
 

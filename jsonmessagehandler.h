@@ -6,7 +6,7 @@
 #include <QString>
 #include <QStringList>
 #include <QJsonObject>
-
+#include <QJsonArray>
 #include "httphandler.h"
 
 class JsonMessageHandler : public QObject
