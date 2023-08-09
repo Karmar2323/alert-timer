@@ -127,6 +127,12 @@ ApplicationWindow {
                 anchors.verticalCenter: alarmRect.verticalCenter
                 anchors.horizontalCenter: alarmRect.horizontalCenter
                 font.bold: true
+
+                SequentialAnimation on font.pixelSize {
+                    loops: Animation.Infinite
+                    PropertyAnimation { to: 20 }
+                    PropertyAnimation { to: 12 }
+                }
             }
 
             Text {
@@ -220,22 +226,49 @@ ApplicationWindow {
         x: 10
         y: 50
         width: 200
-        height: 100
+        height: 120
         modal: false
         focus: true
         closePolicy: Popup.CloseOnEscape || Popup.CloseOnPressOutsideParent
         visible: Backend.alarm && popupButton.checked
         dim: true
-        contentItem: Text {
-            text: qsTr("ALARM! \n(Press Esc to close or click Stop)")
+        contentItem:
+            Rectangle{
+                Column{
+
+                    Text {
+                        id: alarmText
+                        text: qsTr("ALARM!")
+                        color: "red"
+                        font.bold: true
+                        font.pixelSize: 32
+                        x: 40
+
+                        SequentialAnimation on x {
+                            loops: Animation.Infinite
+                            PropertyAnimation { to: 40 }
+                            PropertyAnimation { to: 20 }
+                        }
+                    }
+
+                    Text{
+                         text: "\n(Press Esc to close or click Stop)"
+                    }
+
+                    Loader {
+                        x: 80
+                        sourceComponent: stopButton
+                    }
+                }
+
+
+
         }
+
+
         onOpened: window.alert(Backend.alarmDuration)
 
-        Loader {
-            x: 80
-            y: 50
-            sourceComponent: stopButton
-        }
+
     }
 
 
