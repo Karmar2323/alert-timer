@@ -8,9 +8,11 @@ These features are working on the windowed application:
 - Setting the alert time by typing the hours, minutes and seconds. The digits can be incremented and decremented by buttons.
 - Stopping the alert timer countdown with buttons.
 - Showing the time remaining and counting down the digits of hours, minutes and seconds.
-- Showing a popup window at the alert time. If the app is not on the foreground, it alerts the user by e.g. flashing the window icon at the taskbar. The popup can be switched off.
+- Showing a popup window at the alert time. The window has the text "ALARM" moving back and forth and a button to stop the alert.
+- The popup can be disabled.
+- If the popup is enabled and the app is not on the foreground, it alerts the user by e.g. flashing the window icon at the taskbar.
 - Setting the duration of the alarm with a slider (e.g. how long the popup window is visible).
-- An extra window that shows time only.
+- An extra window that either reads "OFF" when timer is off, or shows the remaining time when counting down, or has the text "ALARM" pulsating at the alert time.
 - Settings menu with the item that toggles the the extra window visibility.
 - Information menu with the items "About" and "License".
 
