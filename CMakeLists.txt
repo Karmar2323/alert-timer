@@ -5,7 +5,7 @@ project(TimeAlerter VERSION 0.1 LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(Qt6 6.4 REQUIRED COMPONENTS Quick
-    Network)
+    Network Multimedia)
 
 qt_standard_project_setup()
 
@@ -23,6 +23,9 @@ qt_add_qml_module(appTimeAlerter
     QML_FILES Main.qml
     TimeRow.qml
     logic.mjs
+
+    RESOURCES
+    media/Explosion+7_freesoundeffects.com.wav
 )
 
 set_target_properties(appTimeAlerter PROPERTIES

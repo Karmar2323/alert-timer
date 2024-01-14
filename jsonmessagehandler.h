@@ -18,7 +18,7 @@ public:
     const QString GAME = "ALERT_TIMER";
     const QString EVENT_NAME = "ALERT";
     const QString REQUEST = "POST";
-    const QString EVENT_ENDPOINT = "/event";
+    const QString EVENT_ENDPOINT = "/game_event";
     const QString HEARTBEAT_ENDPOINT = "/game_heartbeat";
     const QString REGISTER_ENDPOINT = "/register_game_event";
     const QString BIND_ENDPOINT = "/bind_game_event";
@@ -31,7 +31,7 @@ public:
         eventEp, heartEp, registerEp, bindEp, removeEp
     };
 
-    QJsonObject jsonHandler, gameEventJson, removeGameJson,
+    QJsonObject gameEventJson, removeGameJson,
         heartBeatJson, registerJson, bindJson, removeEventJson;
 
     QString getGAME() const;

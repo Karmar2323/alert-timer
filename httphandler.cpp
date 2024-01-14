@@ -37,7 +37,13 @@ void HttpHandler::postJson(QString address, quint16 port,
 
 void HttpHandler::onReplyFinished(QNetworkReply *reply){
 
-    qDebug() << reply->errorString() << ", error: " <<  reply->error();
+    if(reply->error() != QNetworkReply::NoError) {
+        qDebug() << reply->errorString() << ", error: " <<  reply->error();
+    }
+
+    qDebug() << "Reply status code: "
+             << reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toString();
+
     reply->deleteLater();
 }
 

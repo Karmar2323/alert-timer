@@ -19,7 +19,7 @@ JsonMessageHandler::JsonMessageHandler(QObject *parent)
     gameEventJson.insert("game", GAME);
     gameEventJson.insert("event", EVENT_NAME);
     QJsonObject dataObj;
-    dataObj.insert("value", QJsonValue(2));
+    dataObj.insert("value", QJsonValue(255));
     QJsonValue dataValue = QJsonValue(dataObj);
     gameEventJson.insert("data", dataValue);
 
@@ -30,27 +30,31 @@ JsonMessageHandler::JsonMessageHandler(QObject *parent)
 
     bindJson.insert("game", GAME);
     bindJson.insert("event", EVENT_NAME);
-    bindJson.insert("min_value", 3);
-    bindJson.insert("max_value", 49);
+    bindJson.insert("min_value", 0);
+    bindJson.insert("max_value", 255);
     // binding requires handlers:
     // define JSON handlers
     // for mouse illumination:
     QJsonObject handler;
     handler.insert("device-type", QJsonValue("mouse"));
     handler.insert("zone", QJsonValue("logo"));
+    //handler.insert("zone", QJsonValue("wheel"));
     handler.insert("mode", QJsonValue("color"));
     QJsonObject rgb;
     rgb.insert("red", 255);
     rgb.insert("green", 255);
-    rgb.insert("blue", 255);
-    handler.insert("color", QJsonValue(rgb).toString());
+    rgb.insert("blue", 0);
+    handler.insert("color", QJsonValue(rgb));
+    QJsonObject frequency;
+    frequency.insert("frequency", QJsonValue(4));
+    handler.insert("rate", QJsonValue(frequency));
     // handlers in array
     QJsonArray handlerArray;
     handlerArray.push_back(QJsonValue(handler));
     bindJson.insert("handlers", QJsonValue(handlerArray));
+    heartBeatJson.insert("game", GAME);
 
 }
-
 
 QJsonObject JsonMessageHandler::setupLedMessage(int endPoint) {
 

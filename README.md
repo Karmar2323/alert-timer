@@ -1,7 +1,9 @@
 # Time Alerter (alert timer)
 
 ## The purpose of the app
-The app provides a user interface for setting an alert time. The alert shows on SteelSeries device illumination or on PC screen or plays a sound.
+The app provides a user interface for setting an alert time.
+The alert shows on the app window.
+Planned alerts include sound or SteelSeries device illumination.
  
 ## Work in progress
 These features are working on the windowed application:
@@ -17,6 +19,8 @@ These features are working on the windowed application:
 - Information menu with the items "About" and "License".
 
 Different alert execution types are under consideration: playing a sound, changing [SteelSeries device illumination](https://github.com/SteelSeries/gamesense-sdk) or popping up other notification.
+The use of SteelSeries illumination is an incomplete feature.
+(Causes are keyboard disconnection issues when using USB hubs and GameSense's lack of support for non-RGB mice.)
 
 A preview image of the user interface when the time is running:
 

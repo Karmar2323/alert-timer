@@ -1,0 +1,83 @@
+
+POST http://127.0.0.1:64415/game_event HTTP/1.1
+content-type: application/json
+
+{
+    {"event":"ALERT","game":"TIMERTESTER","handlers":[{"color":{"blue":0,"green":255,"red":255},"device-type":"mouse","mode":"color","rate":{"frequency":4},"zone":"logo"}],"max_value":255,"min_value":0}
+}
+
+###
+POST http://127.0.0.1:64415/bind_game_event HTTP/1.1
+content-type: application/json
+
+{
+    "game":  "TIMERTESTER", 
+    "event":  "ALERTTESTING",
+    "handlers": [
+    {
+    "color": {
+     "blue": 0,   "green": 0,   "red": 255
+     },
+    "device-type":  "mouse",    "mode":  "color",
+    "rate": {   "frequency": 4   },
+    "zone":  "wheel"
+    }],
+    "max_value": 255, "min_value": 0
+}
+
+###
+POST http://127.0.0.1:64415/bind_game_event HTTP/1.1
+content-type: application/json
+
+{
+    "game":  "TIMERTESTER", 
+    "event":  "ALERTTESTING",
+    "handlers": [
+    {
+    "color": {"gradient": 
+    {
+    "zero": {
+      "red": 255,
+      "green": 0,
+      "blue": 0
+    },
+    "hundred": {
+      "red": 0,
+      "green": 0,
+      "blue": 0
+    }
+  }
+     },
+    "device-type":  "mouse",    "mode":  "color",
+    "rate": {   "frequency": 4   },
+    "zone":  "wheel"
+    }],
+    "max_value": 255, "min_value": 0
+}
+
+###
+POST http://127.0.0.1:64415/register_game_event HTTP/1.1
+content-type: application/json
+
+{
+    "game":"TIMERTESTER",
+    "event":"ALERTTESTING"
+}
+
+###
+POST http://127.0.0.1:64415/game_event HTTP/1.1
+content-type: application/json
+
+{
+    "data": {"value": 110},
+    "event": "ALERTTESTING",
+    "game": "TIMERTESTER"
+}
+
+###
+POST http://127.0.0.1:64415/game_heartbeat HTTP/1.1
+content-type: application/json
+
+{
+    "game": "TIMERTESTER"
+}

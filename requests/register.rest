@@ -1,0 +1,10 @@
+POST http://localhost:53051/game_event HTTP/1.1
+content-type: application/json
+
+{
+  "game": "MY_GAME",
+  "event": "HEALTH",
+  "data": {
+      "value": 75
+  }
+}

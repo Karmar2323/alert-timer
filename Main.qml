@@ -5,6 +5,7 @@ import QtQuick
 import QtQuick.Window
 import QtQuick.Controls
 import QtQuick.Layouts
+import QtMultimedia
 import TimeAlerter
 import "logic.mjs" as Logic
 
@@ -20,6 +21,17 @@ ApplicationWindow {
 
     background: Rectangle {
         color: "darkgray"
+
+    }
+
+    MouseArea {
+        anchors.fill: parent
+        onClicked: beep.play()
+    }
+
+    SoundEffect {
+        id: beep
+        source: Qt.resolvedUrl("media/Explosion+7_freesoundeffects.com.wav")
     }
 
     header: ToolBar {
@@ -121,6 +133,13 @@ ApplicationWindow {
             border.width: 5
             radius: 50
 
+            SequentialAnimation on radius {
+                loops: Animation.Infinite
+                running: Backend.alarm
+                PropertyAnimation { to: 50 }
+                PropertyAnimation { to: 25 }
+            }
+
             Text {
                 text: qsTr("ALARM!")
                 color: "yellow"
@@ -130,7 +149,7 @@ ApplicationWindow {
 
                 SequentialAnimation on font.pixelSize {
                     loops: Animation.Infinite
-                    PropertyAnimation { to: 20 }
+                    PropertyAnimation { to: 18 }
                     PropertyAnimation { to: 12 }
                 }
             }
@@ -160,7 +179,6 @@ ApplicationWindow {
         columns: 2
         rows: 4
         rowSpacing: 10
-
 
         Rectangle {
             color: Backend.counterOn ? "green" : boxColor
@@ -260,8 +278,6 @@ ApplicationWindow {
                         sourceComponent: stopButton
                     }
                 }
-
-
 
         }
 

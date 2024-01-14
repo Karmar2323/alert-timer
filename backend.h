@@ -48,19 +48,25 @@ public:
     Q_INVOKABLE bool getLedStatus() const;
     void setLedStatus(bool newLedStatus);
 
+    void setLedAlarmVisible(bool newLedAlarmVisible);
+
 private:
     bool m_counterOn;
 
     QTimer m_alertCounter;
     QTimer m_timeLeftTimer;
+    QTimer m_heartBeatTimer;
     QString m_corePropsPath;
     QString m_ledAddress;
     quint16 m_port;
+    QPointer<JsonMessageHandler> JMH = new JsonMessageHandler();
+    QPointer<HttpHandler> HH = new HttpHandler();
 
-    bool m_ledStatus = true;
+    bool m_ledStatus = false;
     int m_defaultTimeout = 4000;//1.8e6 + 5000;
     int m_timeLeft = 0;
     bool m_alarm = false; // set true when counter zeroes
+    bool m_ledAlarmVisible = false;
 
     bool counterOn() const;
     void setCounterOn(bool newCounterOn);
@@ -78,6 +84,7 @@ private:
 public slots:
     void stopAlarm();
     void soundAlarm();
+    void showLedAlarm();
 signals:
     void counterOnChanged();
     void defaultTimeoutChanged();
@@ -86,6 +93,7 @@ signals:
     void alertTimeChanged();
     void alarmChanged();
     void alarmDurationChanged();
+    void ledAlarmVisibleChanged();
 };
 
 #endif // BACKEND_H

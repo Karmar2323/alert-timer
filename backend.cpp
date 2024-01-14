@@ -15,18 +15,19 @@ Backend::Backend()
     m_corePropsPath = chooseCorePropsPath();
     m_ledStatus = findLED(m_corePropsPath);
 
-    QPointer JMH = new JsonMessageHandler();
-    QPointer HH = new HttpHandler();
-
     if (m_ledStatus) {
-        // set up registration JSON: get final address and data
-        QJsonObject ledMessage =  JMH->setupLedMessage(JMH->endPoints::registerEp);
+        // binding has handler: more useful than registration
+        // set up JSON: get final address and data
+        QJsonObject ledMessage = JMH->setupLedMessage(JMH->endPoints::bindEp);
         QString endpoint = ledMessage.take("endpoint").toString();
-        // post it
+
+        // post registration data
         HH->postJson(getLedAddress(), m_port, endpoint, ledMessage);
     }
-}
 
+    // TODO disconnect and reconnect with checking of led button
+    QObject::connect(this, &Backend::alarmChanged, this, &Backend::showLedAlarm);
+}
 
 void Backend::setTimeLeftProperty(){
     setTimeLeft(m_alertCounter.remainingTime());
@@ -65,6 +66,36 @@ void Backend::setLedStatus(bool newLedStatus)
     m_ledStatus = newLedStatus;
 }
 
+void Backend::setLedAlarmVisible(bool newLedAlarmVisible)
+{
+    m_ledAlarmVisible = newLedAlarmVisible;
+
+}
+
+void Backend::showLedAlarm()
+{
+    if (getLedStatus() ) {
+        qDebug() << "Backend: showLedAlarm";
+        // TODO if led alarm checked
+        // set up JSON: get final address and data
+        //QJsonObject ledMessage = JMH->setupLedMessage(JMH->endPoints::heartEp);
+        QJsonObject ledMessage = JMH->setupLedMessage(JMH->endPoints::eventEp);
+        QString endpoint = ledMessage.take("endpoint").toString();
+
+        // post registration data
+        HH->postJson(getLedAddress(), m_port, endpoint, ledMessage);
+
+        //TODO start timer for posting heartbeat
+        ledMessage = JMH->setupLedMessage(JMH->endPoints::heartEp);
+        endpoint = ledMessage.take("endpoint").toString();
+        HH->postJson(getLedAddress(), m_port, endpoint, ledMessage);
+        //m_heartBeatTimer.setInterval(500);
+
+    }
+    else {
+        // TODO stop heartbeat timer, stop posting
+    }
+}
 
 QString Backend::chooseCorePropsPath()
 {
@@ -83,18 +114,16 @@ QString Backend::chooseCorePropsPath()
     return filePath;
 }
 
-
 QString Backend::getRealWinPath(QString* filePath){
 
     QChar *unwanted = filePath->begin();
 
-    filePath->remove(*unwanted); //filePath->remove("%");
+    filePath->remove(*unwanted);
     filePath->prepend("C:/");
 
     return *filePath;
 
 }
-
 
 bool Backend::findLED(QString propsPath)
 {
