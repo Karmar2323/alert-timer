@@ -25,7 +25,10 @@ qt_add_qml_module(appTimeAlerter
     logic.mjs
 
     RESOURCES
-    media/Explosion+7_freesoundeffects.com.wav
+    media/speaker.svgz
+    media/speaker-silent.svgz
+    SOURCES
+    QML_FILES AudioAlarm.qml
 )
 
 set_target_properties(appTimeAlerter PROPERTIES

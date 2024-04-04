@@ -1,4 +1,4 @@
-// Copyright (C) 2023 Markus Karjalainen
+// Copyright (C) 2023 - 2024 Markus Karjalainen
 // License: LGPL-3.0-only OR GPL-2.0-only OR GPL-3.0-only
 
 import QtQuick
@@ -17,16 +17,10 @@ ApplicationWindow {
     title: qsTr("Time Alerter")
     property string timeCount: Logic.formatMilliSecondsToTimeString(Backend.timeLeft)
     property string boxColor: "lightgreen"
-    property string copyright: "Copyright (C) 2023 Markus Karjalainen"
+    property string copyright: "Copyright (C) 2024 Markus Karjalainen"
 
     background: Rectangle {
         color: "darkgray"
-
-    }
-
-    MouseArea {
-        anchors.fill: parent
-        onClicked: beep.play()
     }
 
     SoundEffect {
@@ -58,6 +52,13 @@ ApplicationWindow {
 
             CheckBox {
                 height: toolBarStop.height
+                id: soundToggle
+                checked: audioAlarm.audioReady
+                text: qsTr("Sound ")
+            }
+
+            CheckBox {
+                height: toolBarStop.height
                 id: ledButton
                 checked: Backend.getLedStatus()
                 checkable: true
@@ -84,12 +85,12 @@ ApplicationWindow {
             id: menu
             title: qsTr("Info")
 
-            ToolButton {
+            MenuItem {
                 text: qsTr("About")
                 onClicked: aboutDialog.open()
             }
 
-            ToolButton {
+            MenuItem {
                 text: qsTr("License")
                 onClicked: licenseDialog.open()
             }
@@ -100,7 +101,7 @@ ApplicationWindow {
             id: settingMenu
             title: qsTr("Settings")
 
-            ToolButton {
+            MenuItem {
                 text: alarmWindow.visible ? qsTr("Hide extra window") : qsTr("Show extra window")
                 onClicked: () => {
                                alarmWindow.visible = !alarmWindow.visible
@@ -109,6 +110,14 @@ ApplicationWindow {
                                    alarmWindow.x = screen.width - 2 * alarmWindow.width
                                    alarmWindow.y = screen.height - 2 * alarmWindow.height
                                }
+                           }
+            }
+
+            MenuItem {
+                id: newSoundButton
+                text: audioAlarm.audioReady ? qsTr("Change sound") : qsTr("Choose sound")
+                onClicked: () => {
+                               audioAlarm.fileSelector.open()
                            }
             }
 
@@ -181,10 +190,10 @@ ApplicationWindow {
         rowSpacing: 10
 
         Rectangle {
-            color: Backend.counterOn ? "green" : boxColor
+            id: timeCountRect
+            color: Backend.alarm ? "green" : boxColor
             width: 200
             height: 200
-            id: timeCountRect
             border.color: "gray"
             border.width: 2
             x: 2
@@ -278,13 +287,35 @@ ApplicationWindow {
                         sourceComponent: stopButton
                     }
                 }
+        }
+    }
 
+    Popup {
+        // Use MediaPlayer, show image
+        id: mediaPopup
+        x: 145
+        y: 5
+        width: 50
+        height: 50
+        modal: false
+        focus: false
+        closePolicy: Popup.NoAutoClose
+        visible: Backend.alarm && soundToggle.checked
+        contentItem: Image {
+            id: speakerImage
+            width: parent.width
+            height: parent.height
+            source: audioAlarm.playing ? "media/speaker.svgz" : "media/speaker-silent.svgz"
         }
 
+        onOpened: () => {
+                      window.alert(Backend.alarmDuration)
+                      audioAlarm.playAudio()
+                  }
+    }
 
-        onOpened: window.alert(Backend.alarmDuration)
-
-
+    AudioAlarm {
+        id: audioAlarm
     }
 
 
