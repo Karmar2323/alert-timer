@@ -101,6 +101,20 @@ ApplicationWindow {
             id: settingMenu
             title: qsTr("Settings")
 
+            Menu {
+                title: qsTr("Color")
+
+                MenuItem {
+                    text: qsTr("Green")
+                    onTriggered: boxColor = "lightgreen"
+                }
+
+                MenuItem {
+                    text: qsTr("Blue")
+                    onTriggered: boxColor = "lightblue"
+                }
+            }
+
             MenuItem {
                 text: alarmWindow.visible ? qsTr("Hide extra window") : qsTr("Show extra window")
                 onClicked: () => {
@@ -120,7 +134,6 @@ ApplicationWindow {
                                audioAlarm.fileSelector.open()
                            }
             }
-
         }
     }
 

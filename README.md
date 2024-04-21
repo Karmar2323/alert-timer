@@ -15,7 +15,12 @@ These features are working on the windowed application:
 - If the popup is enabled and the app is not on the foreground, it alerts the user by e.g. flashing the window icon at the taskbar.
 - Setting the duration of the alarm with a slider (e.g. how long the popup window is visible).
 - An extra window that either reads "OFF" when timer is off, or shows the remaining time when counting down, or has the text "ALARM" pulsating at the alert time.
-- Settings menu with the item that toggles the the extra window visibility.
+- Settings menu: item that toggles the extra window visibility.
+- Settings menu: item for choosing a sound file for the alarm.
+- Settings menu: items for choosing a color for the controls' background rectangle.
+- A popup that asks to choose a sound file at program start.
+- Sound alarm: can be disabled or enabled.
+- Sound alarm: a popup image is shown as the sound plays and it changes when playing ends.
 - Information menu with the items "About" and "License".
 
 Different alert execution types are under consideration: playing a sound, changing [SteelSeries device illumination](https://github.com/SteelSeries/gamesense-sdk) or popping up other notification.
