@@ -19,6 +19,10 @@ Item {
         console.log("playing")
         player.play()
     }
+    function stopAudio() {
+        console.log("stopping media")
+        player.stop()
+    }
 
     Timer {
         // wait for media player component and check if media is loaded

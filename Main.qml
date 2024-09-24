@@ -325,6 +325,9 @@ ApplicationWindow {
                       window.alert(Backend.alarmDuration)
                       audioAlarm.playAudio()
                   }
+        onClosed: () => {
+                      audioAlarm.stopAudio()
+                  }
     }
 
     AudioAlarm {
